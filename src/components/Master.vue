@@ -1,6 +1,13 @@
 <template>
     <div>
-        <h1>Master </h1>
+        <h1>Master</h1>
+        <iframe
+        id="frameExample"
+        title="Frame Example"
+        width="700"
+        height="500"
+        src="http://localhost:8081/">
+        </iframe>
     </div>
 </template>
 
@@ -18,9 +25,12 @@ let master = Gateway({
                     test: "hello from master",
                     mess: 'another message'
                 },
-                init: function() {
-                    console.log('initialized master')
+                init: function(data) {
+                    console.log('initialized master', data)
                 },
+                loaded:  function() {
+                    console.log('loaded event')
+                }
          }
     },
     allowedOrigins : '*',
@@ -34,6 +44,8 @@ master.emit('frameExample', {
     data: {test: 'test123'},
     slaveId : 'GatewayPlayground'
 }, '*')
+
+
 
 
 export default {
