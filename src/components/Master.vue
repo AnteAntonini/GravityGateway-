@@ -6,7 +6,6 @@
         title="Frame Example"
         src="http://localhost:8081/">
         </iframe>
-        <button @click="msgToSlave">Send to Slave</button>
     </div>
 </template>
 
@@ -41,21 +40,11 @@ let master = Gateway({
 })
 
 
-master.on('helloMaster', (event) => console.log(event.data));
+master.on("HelloMaster", (event) => console.log(event.data));
 
 
 export default {
     name: 'Master',
-
-    methods: {
-        msgToSlave() {
-            master.emit('frameExample', {
-                action: 'helloSlave',
-                data: {masterMessage: 'master message to slave'},
-                slaveId: 'GatewayPlayground'
-            }, '*')
-        }
-    }
 }
 
 
