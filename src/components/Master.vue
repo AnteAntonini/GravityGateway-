@@ -4,10 +4,9 @@
         <iframe
         id="frameExample"
         title="Frame Example"
-        width="700"
-        height="500"
         src="http://localhost:8081/">
         </iframe>
+        <button @click="msgToSlave">Send to Slave</button>
     </div>
 </template>
 
@@ -25,31 +24,47 @@ let master = Gateway({
                     test: "hello from master",
                     mess: 'another message'
                 },
-                init: function(data) {
-                    console.log('initialized master', data)
+                init: function() {
                 },
-                loaded:  function() {
+                loaded: function() {
                     console.log('loaded event')
+                    master.emit('frameExample', {
+                        action : 'Betslip.Add',
+                        data: {test: 'test123'},
+                        slaveId : 'GatewayPlayground'
+                    }, '*')
                 }
          }
     },
     allowedOrigins : '*',
-    debug : false,
+    debug : true,
 })
 
-master.on("HelloMaster", (event) => console.log(event.data.message));
 
-master.emit('frameExample', {
-    action : 'Betslip.Add',
-    data: {test: 'test123'},
-    slaveId : 'GatewayPlayground'
-}, '*')
-
-
+master.on('helloMaster', (event) => console.log(event.data));
 
 
 export default {
     name: 'Master',
+
+    methods: {
+        msgToSlave() {
+            master.emit('frameExample', {
+                action: 'helloSlave',
+                data: {masterMessage: 'master message to slave'},
+                slaveId: 'GatewayPlayground'
+            }, '*')
+        }
+    }
 }
 
+
 </script>
+
+
+<style scoped>
+#frameExample {
+    height: 500px !important;
+    width: 500px;
+}
+</style>
