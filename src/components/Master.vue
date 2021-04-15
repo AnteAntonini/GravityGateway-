@@ -41,12 +41,19 @@ let master = Gateway({
 })
 
 
+
+master.on('asyncMess', function(event) {
+    fetch('test.json').then(response => response.json())
+    .then(data => console.log(data))
+    .then(data => event.resolve(data))
+});
+
+
 master.on('helloMaster', (event) => console.log(event.data.slaveMessage));
 
 
 export default {
     name: 'Master',
-
     methods: {
         msgToSlave() {
             master.emit('frameExample', {
